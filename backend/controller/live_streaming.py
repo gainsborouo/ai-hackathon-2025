@@ -34,15 +34,15 @@ def create_ls():
     }), 201
 
 @jwt_required()
-def end_ls(id):
+def end_ls():
     user_id = get_jwt_identity()
     user = User.query.get(user_id)
     if not user or user.role != RoleEnum.IDOL:
         return jsonify({"error": "access denied"}), 403
 
-    ls = LiveStreaming.query.get(id)
+    ls = get_current_ls()
     if not ls:
-        return jsonify({"error": "Resource not found"}), 404
+        return jsonify({"error": "No Live Streaming is being held"}), 404
     if ls.initiator_id != user.id:
         return jsonify({"error": "Cannot end a stream you did not start"}), 403
 
@@ -55,17 +55,25 @@ def end_ls(id):
     }), 200
 
 def check_ls():
+    ls = get_current_ls()
+    if not ls:
+        return jsonify({}), 200
+    
+    initiator = ls.initiator
+    return jsonify({
+        "id": ls.id,
+        "fans_class": ls.fans_class,
+        "title": ls.title,
+        "initiator_id": initiator.id,
+        "initiator_name": initiator.name,
+        "initiator_avatar": initiator.avatar,
+        "start_time": ls.start_time
+    }), 200
+
+def get_current_ls():
     now = datetime.utcnow()
     ls = LiveStreaming.query.filter(
         LiveStreaming.end_time.is_(None),
         LiveStreaming.start_time <= now
     ).first()
-    if not ls:
-        return jsonify({}), 200
-    return jsonify({
-        "id": ls.id,
-        "fans_class": ls.fans_class,
-        "title": ls.title,
-        "initiator_id": ls.initiator_id,
-        "start_time": ls.start_time
-    }), 200
+    return ls

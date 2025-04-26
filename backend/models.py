@@ -28,15 +28,27 @@ class User(db.Model):
         lazy='selectin'
     )
 
+    live_streamings = db.relationship(
+        'LiveStreaming',
+        back_populates='initiator',
+        cascade='all, delete-orphan',
+        lazy='selectin'
+    )
+
 
 class LiveStreaming(db.Model):
     __tablename__ = 'live_streamings'
     id = db.Column(db.Integer, primary_key=True)
     fans_class = db.Column(db.Integer, nullable=False, default=1)
     title = db.Column(db.String(255), nullable=False)
-    initiator_id = db.Column(db.Integer, nullable=False)
+    initiator_id = db.Column(db.Integer, ForeignKey('users.id'), nullable=False)
     start_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
     end_time = db.Column(db.DateTime, nullable=True)
+
+    initiator = db.relationship(
+        'User',
+        back_populates='live_streamings'
+    )
 
 class WatchTime(db.Model):
     __tablename__ = 'watch_times'

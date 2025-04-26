@@ -10,12 +10,15 @@ def calculate_credit(duration: timedelta):
     return int(minutes_watched)
 
 @jwt_required()
-def start_watching(live_stream_id):
+def start_watching():
     current_user_id = get_jwt_identity()
 
-    live_stream = LiveStreaming.query.get(live_stream_id)
+    live_stream = get_current_ls()
+
     if not live_stream:
         return jsonify({"message": "Live stream not found"}), 404
+
+    live_stream_id = live_stream.id
 
     user = User.query.get(current_user_id)
     if not user:
@@ -43,9 +46,15 @@ def start_watching(live_stream_id):
 
 
 @jwt_required()
-def stop_watching(live_stream_id):
+def stop_watching():
     current_user_id = get_jwt_identity()
 
+    ls = get_current_ls()
+
+    if not ls:
+        return jsonify({"message": "No live streaming is being held"}), 404
+
+    live_stream_id = ls.id
     watch_time_record = WatchTime.query.filter_by(
         user_id=current_user_id,
         live_streaming_id=live_stream_id,
@@ -78,3 +87,11 @@ def stop_watching(live_stream_id):
         db.session.rollback()
         print(f"Error stopping watching: {e}")
         return jsonify({"message": "Failed to stop watching"}), 500
+
+def get_current_ls():
+    now = datetime.utcnow()
+    ls = LiveStreaming.query.filter(
+        LiveStreaming.end_time.is_(None),
+        LiveStreaming.start_time <= now
+    ).first()
+    return ls
