@@ -2,7 +2,7 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from models import db
-from routes import bp_user, bp_ls
+from routes import bp_user, bp_ls, bp_watch, bp_comment
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from datetime import datetime, timezone, timedelta
@@ -34,6 +34,8 @@ jwt.init_app(app)
 
 app.register_blueprint(bp_user, url_prefix='/api/user')
 app.register_blueprint(bp_ls, url_prefix='/api/ls')
+app.register_blueprint(bp_watch, url_prefix='/api/watch')
+app.register_blueprint(bp_comment, url_prefix='/api/comment')
 
 if __name__ == '__main__':
     with app.app_context():
