@@ -2,16 +2,17 @@ import os
 from flask import Flask
 from flask_cors import CORS
 from models import db
-from routes import bp_user
+from routes import bp_user, bp_ls
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
 from flask.json.provider import DefaultJSONProvider
 from seeder import seed_database
 
 class DateTimeFormatter(DefaultJSONProvider):
     def default(self, obj):
         if isinstance(obj, datetime):
+            obj = obj + timedelta(hours=8) # deal with timezone
             return obj.strftime("%Y/%m/%d %H:%M:%S")
         return super().default(obj)
 
@@ -32,6 +33,7 @@ db.init_app(app)
 jwt.init_app(app)
 
 app.register_blueprint(bp_user, url_prefix='/api/user')
+app.register_blueprint(bp_ls, url_prefix='/api/ls')
 
 if __name__ == '__main__':
     with app.app_context():

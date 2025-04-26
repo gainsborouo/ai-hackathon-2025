@@ -26,7 +26,7 @@ def login():
         "credit": user.credit,
         "role": user.role.value,
     }
-    token = create_access_token(identity=user.id, additional_claims=additional_claims)
+    token = create_access_token(identity=str(user.id), additional_claims=additional_claims)
     return jsonify({
         "token": token,
     }), 200

@@ -21,16 +21,20 @@ def seed_database():
             role=RoleEnum.FANS
         ))
 
+    fans[0].fan_class = 2
+    fans[1].fan_class = 3
     db.session.add_all([idol] + fans)
     db.session.commit()
 
     now = datetime.utcnow()
     ls_start = now - timedelta(minutes=150)
+    ls_end = now - timedelta(minutes=20)
     ls = LiveStreaming(
         fans_class=1,
         initiator_id=idol.id,
         title="Late-Night Chat Session",
         start_time=ls_start,
+        end_time=ls_end
     )
     db.session.add(ls)
     db.session.commit()
@@ -38,7 +42,7 @@ def seed_database():
     watch_times = []
     for fan in fans:
         start_time = ls_start + timedelta(minutes=random.randint(0, 10))
-        end_time = ls_start + timedelta(minutes=random.randint(15, 150))
+        end_time = ls_start + timedelta(minutes=random.randint(15, 100))
         credit = int((end_time - start_time).total_seconds() // 60)
         wt = WatchTime(
             user_id=fan.id,
