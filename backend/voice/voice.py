@@ -66,7 +66,7 @@ class VoiceAssistant:
         }
 
         response_bedrock = self.bedrock_client.invoke_model(
-            modelId="us.amazon.nova-lite-v1:0",
+            modelId="us.amazon.nova-pro-v1:0",
             body=json.dumps(payload)
         )
 
@@ -75,12 +75,13 @@ class VoiceAssistant:
         print(result)
         return result
 
-    def toPolly(self, input_text):
+    def toPolly(self, input_text, lang):
+        voice_id = 'Takumi' if lang == 'jp' else 'Joey'
         response_polly = self.polly_client.synthesize_speech(
             Text=input_text,
             TextType='ssml',
             OutputFormat='mp3',
-            VoiceId='Joey'
+            VoiceId=voice_id
         )
 
         with open('output.mp3', 'wb') as file:
@@ -91,5 +92,6 @@ class VoiceAssistant:
 if __name__ == "__main__":
     assistant = VoiceAssistant()
     text = "Hi everyone! I'm so happy to see you here! Every day, I sing and dance with all my heart, just to bring a little more sparkle into your world. No matter where you are, remember — you're never alone. Let's chase our dreams together and make every moment shine bright! Thank you for believing in me. I'll keep growing to become your shining star!"
-    ssml_output = assistant.toBedrock(text)
-    assistant.toPolly(ssml_output)
+    text_jp = "皆さん、こんにちは！お会いできて嬉しいです！毎日、心を込めて歌い、踊ります。皆さんの世界に少しでも輝きを添えられるよう。どこにいても、決して一人じゃないってことを忘れないで。一緒に夢を追いかけて、すべての瞬間を輝かせましょう！私を信じてくれてありがとう。これからも成長して、皆さんの輝く星になろう！"
+    ssml_output = assistant.toBedrock(text_jp)
+    assistant.toPolly(ssml_output, 'jp')
