@@ -21,6 +21,14 @@ class User(db.Model):
     role = db.Column(SQLEnum(RoleEnum, name="role_enum"), nullable=False, default=RoleEnum.FANS, server_default=RoleEnum.FANS.value)
     join_time = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
 
+    comments = db.relationship(
+        'Comment',
+        back_populates='user',
+        cascade='all, delete-orphan',
+        lazy='selectin'
+    )
+
+
 class LiveStreaming(db.Model):
     __tablename__ = 'live_streamings'
     id = db.Column(db.Integer, primary_key=True)
@@ -49,3 +57,8 @@ class Comment(db.Model):
     priority = db.Column(db.Integer, nullable=False, default=0)
     answered = db.Column(db.Boolean, nullable=False, default=False)
     created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  # 新增
+
+    user = db.relationship(
+        'User',
+        back_populates='comments'
+    )

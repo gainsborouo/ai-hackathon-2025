@@ -37,9 +37,11 @@ def fetch_comments(live_stream_id: int):
 
     comment_list = []
     for c in comments:
+        user = c.user
         comment_list.append({
             "id": c.id,
-            "user_id": c.user_id,
+            "username": user.name,
+            "user_avatar": user.avatar,
             "live_streaming_id": c.live_streaming_id,
             "comment": c.comment,
             "is_question": c.is_question,
