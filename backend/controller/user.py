@@ -17,16 +17,17 @@ def login():
     if user is None or not bcrypt.check_password_hash(user.password, password):
         return jsonify({"error": "invalid credentials"}), 401
     
-    token = create_access_token(identity=user.id)
-    return jsonify({ 
+    additional_claims = { 
         "id": user.id, 
         "email": user.email,
         "name": user.name,
         "avatar": user.avatar,
         "class": user.fan_class,
         "credit": user.credit,
-        "join_time": user.join_time,
         "role": user.role.value,
+    }
+    token = create_access_token(identity=user.id, additional_claims=additional_claims)
+    return jsonify({
         "token": token,
     }), 200
 
