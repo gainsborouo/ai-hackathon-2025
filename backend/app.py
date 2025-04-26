@@ -2,6 +2,8 @@ import os
 from flask import Flask
 from models import db
 from routes import bp_user
+from routes import bp_livestream
+from routes import bp_comment
 from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from datetime import datetime
@@ -30,6 +32,8 @@ db.init_app(app)
 jwt.init_app(app)
 
 app.register_blueprint(bp_user, url_prefix='/api/user')
+app.register_blueprint(bp_livestream, url_prefix='/api/livestream') # 設定 URL 前綴
+app.register_blueprint(bp_comment, url_prefix='/api/comment')
 
 if __name__ == '__main__':
     with app.app_context():

@@ -1,7 +1,15 @@
 from flask import Blueprint
 from controller.user import login, register
+from controller.watch_time import start_watching, stop_watching
+from controller.comment import post_comment, fetch_comments
 
 bp_user = Blueprint('bp_user', __name__)
+bp_livestream = Blueprint('bp_livestream', __name__)
+bp_comment = Blueprint('bp_comment', __name__)
 
 bp_user.route('/login', methods=["POST"])(login)
 bp_user.route('/register', methods=["POST"])(register)
+bp_livestream.route('/<int:live_stream_id>/watch/start', methods=["POST"])(start_watching)
+bp_livestream.route('/<int:live_stream_id>/watch/stop', methods=["POST"])(stop_watching)
+bp_comment.route('/<int:live_stream_id>', methods=["POST"])(post_comment)
+bp_comment.route('/<int:live_stream_id>', methods=["GET"])(fetch_comments)

@@ -48,3 +48,4 @@ class Comment(db.Model):
     comment = db.Column(db.Text, nullable=False)
     priority = db.Column(db.Integer, nullable=False, default=0)
     answered = db.Column(db.Boolean, nullable=False, default=False)
+    created_at = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)  # 新增
