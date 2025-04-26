@@ -52,6 +52,7 @@ def fetch_comments():
             "id": c.id,
             "username": user.name,
             "user_avatar": user.avatar,
+            "user_class": user.fan_class,
             "live_streaming_id": c.live_streaming_id,
             "comment": c.comment,
             "is_question": c.is_question,
