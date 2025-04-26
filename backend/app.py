@@ -6,6 +6,7 @@ from dotenv import load_dotenv
 from flask_jwt_extended import JWTManager
 from datetime import datetime
 from flask.json.provider import DefaultJSONProvider
+from seeder import seed_database
 
 class DateTimeFormatter(DefaultJSONProvider):
     def default(self, obj):
@@ -34,4 +35,5 @@ if __name__ == '__main__':
     with app.app_context():
         db.drop_all()
         db.create_all()
+        seed_database()
     app.run(port=8000, debug=True)

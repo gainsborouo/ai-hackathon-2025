@@ -1,0 +1,73 @@
+from models import db, User, RoleEnum, WatchTime, Comment, LiveStreaming
+from flask_bcrypt import Bcrypt
+from datetime import datetime, timedelta
+import random
+
+bcrypt = Bcrypt()
+
+def seed_database():
+    idol = User (
+        email="fenix@gmail.com",
+        password=bcrypt.generate_password_hash("hi").decode("utf-8"),
+        name="FEniX",
+        role=RoleEnum.IDOL
+    )
+    fans = []
+    for i in range(5):
+        fans.append(User(
+            email="user" + str(i) + "@gmail.com",
+            password=bcrypt.generate_password_hash("hi").decode("utf-8"),
+            name="user" + str(i),
+            role=RoleEnum.FANS
+        ))
+
+    db.session.add_all([idol] + fans)
+    db.session.commit()
+
+    now = datetime.utcnow()
+    ls_start = now - timedelta(minutes=150)
+    ls = LiveStreaming(
+        fans_class=1,
+        initiator_id=idol.id,
+        title="Late-Night Chat Session",
+        start_time=ls_start,
+    )
+    db.session.add(ls)
+    db.session.commit()
+
+    watch_times = []
+    for fan in fans:
+        wt = WatchTime(
+            user_id=fan.id,
+            live_streaming_id=ls.id,
+            start_time=ls_start + timedelta(minutes=random.randint(0, 10)),
+            end_time=ls_start + timedelta(minutes=random.randint(15, 150)),
+            credit=1
+        )
+        watch_times.append(wt)
+    db.session.add_all(watch_times)
+    db.session.commit()
+
+    comments = []
+    comments.append(Comment(
+        user_id=2,
+        live_streaming_id=ls.id,
+        is_question=True,
+        comment="How are you today?",
+        priority=2,
+    ))
+    comments.append(Comment(
+        user_id=5,
+        live_streaming_id=ls.id,
+        is_question=True,
+        comment="Do you like cat?",
+        priority=4,
+    ))
+    comments.append(Comment(
+        user_id=3,
+        live_streaming_id=ls.id,
+        comment="Do you wanna build a snowman?",
+        priority=3,
+    ))
+    db.session.add_all(comments)
+    db.session.commit()
