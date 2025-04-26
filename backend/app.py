@@ -1,5 +1,6 @@
 import os
 from flask import Flask
+from flask_cors import CORS
 from models import db
 from routes import bp_user
 from dotenv import load_dotenv
@@ -17,6 +18,7 @@ class DateTimeFormatter(DefaultJSONProvider):
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
 jwt = JWTManager()
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET')

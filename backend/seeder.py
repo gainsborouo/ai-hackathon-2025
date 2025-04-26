@@ -37,14 +37,18 @@ def seed_database():
 
     watch_times = []
     for fan in fans:
+        start_time = ls_start + timedelta(minutes=random.randint(0, 10))
+        end_time = ls_start + timedelta(minutes=random.randint(15, 150))
+        credit = int((end_time - start_time).total_seconds() // 60)
         wt = WatchTime(
             user_id=fan.id,
             live_streaming_id=ls.id,
-            start_time=ls_start + timedelta(minutes=random.randint(0, 10)),
-            end_time=ls_start + timedelta(minutes=random.randint(15, 150)),
-            credit=1
+            start_time=start_time,
+            end_time=end_time,
+            credit=credit
         )
         watch_times.append(wt)
+        fan.credit += credit
     db.session.add_all(watch_times)
     db.session.commit()
 
