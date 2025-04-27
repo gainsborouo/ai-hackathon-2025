@@ -22,21 +22,24 @@
         </div>
 
         <div class="flex flex-col gap-4 text-center font-semibold">
-          <a
-            href="/"
+          <router-link
+            to="/"
             class="py-2 px-4 hover:text-orange-400 hover:bg-gray-50 rounded-lg transition-colors"
-            >首頁</a
+            >首頁</router-link
           >
-          <a
-            href="/live"
+
+          <router-link
+            to="/live"
             class="py-2 px-4 hover:text-orange-400 hover:bg-gray-50 rounded-lg transition-colors"
-            >直播專區</a
+            >直播專區</router-link
           >
-          <a
-            href="/data"
+
+          <router-link
+            to="/data"
             class="py-2 px-4 hover:text-orange-400 hover:bg-gray-50 rounded-lg transition-colors"
-            >個人資料</a
+            >個人資料</router-link
           >
+
           <a
             @click="handleLogout"
             class="py-2 px-4 hover:text-orange-400 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer"
@@ -57,7 +60,14 @@
 </template>
 
 <script setup>
-import { ref, onMounted, defineProps, defineEmits, onUnmounted, computed } from "vue";
+import {
+  ref,
+  onMounted,
+  defineProps,
+  defineEmits,
+  onUnmounted,
+  computed,
+} from "vue";
 import { useRouter } from "vue-router";
 import { authStore } from "../store/auth";
 import axios from "axios";
@@ -73,15 +83,15 @@ const props = defineProps({
 
 const getAvatarUrl = computed(() => {
   if (!userData.value?.avatarUrl) {
-    return '/default-avatar.png';
+    return "/default-avatar.png";
   }
-  
-//   // Check if the avatarUrl is already a complete URL
-//   if (userData.value.avatarUrl.startsWith('http') || 
-//       userData.value.avatarUrl.startsWith('https')) {
-//     return userData.value.avatarUrl;
-//   }
-  
+
+  //   // Check if the avatarUrl is already a complete URL
+  //   if (userData.value.avatarUrl.startsWith('http') ||
+  //       userData.value.avatarUrl.startsWith('https')) {
+  //     return userData.value.avatarUrl;
+  //   }
+
   // Handle a relative path
   return `/avatar${userData.value.avatarUrl}.png`;
 });
@@ -110,15 +120,17 @@ const fetchUserData = async () => {
       return;
     }
 
-    const tokenParts = token.split('.');
+    const tokenParts = token.split(".");
     if (tokenParts.length === 3) {
       try {
-        const base64Payload = tokenParts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const base64Payload = tokenParts[1]
+          .replace(/-/g, "+")
+          .replace(/_/g, "/");
         const normalizedBase64 = base64Payload.padEnd(
-          base64Payload.length + (4 - (base64Payload.length % 4)) % 4,
-          '='
+          base64Payload.length + ((4 - (base64Payload.length % 4)) % 4),
+          "="
         );
-        
+
         const payload = JSON.parse(atob(normalizedBase64));
 
         userData.value = {
@@ -128,9 +140,9 @@ const fetchUserData = async () => {
           email: payload.email,
           fanClass: payload.class,
           credit: payload.credit,
-          role: payload.role
+          role: payload.role,
         };
-        
+
         console.log("Extracted user data from token:", userData.value);
       } catch (decodeError) {
         console.error("Failed to decode JWT token:", decodeError);
@@ -145,7 +157,7 @@ const fetchUserData = async () => {
 };
 
 const handleLogout = () => {
-  authStore.setToken(null);
+  authStore.logout();
 
   router.push({ name: "Login" });
 

@@ -22,5 +22,21 @@ export const authStore = reactive({
   
   clearAuth() {
     this.setToken(null);
+  },
+
+  logout() {
+    if (window.appCleanupCallbacks && Array.isArray(window.appCleanupCallbacks)) {
+      window.appCleanupCallbacks.forEach(callback => {
+        if (typeof callback === 'function') {
+          try {
+            callback();
+          } catch (e) {
+            console.error('Error in cleanup callback:', e);
+          }
+        }
+      });
+    }
+
+    localStorage.removeItem("jwtToken");
   }
 });
