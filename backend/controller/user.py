@@ -2,6 +2,7 @@ from flask import jsonify, request
 from flask_bcrypt import Bcrypt
 from models import User, db
 from flask_jwt_extended import create_access_token
+from datetime import timedelta
 
 bcrypt = Bcrypt()
 
@@ -26,7 +27,12 @@ def login():
         "credit": user.credit,
         "role": user.role.value,
     }
-    token = create_access_token(identity=str(user.id), additional_claims=additional_claims)
+    token = create_access_token(
+        identity=str(user.id), 
+        additional_claims=additional_claims, 
+        expires_delta=timedelta(minutes=360)
+    )
+
     return jsonify({
         "token": token,
     }), 200

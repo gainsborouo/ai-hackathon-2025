@@ -10,7 +10,8 @@ def seed_database():
         email="fenix@gmail.com",
         password=bcrypt.generate_password_hash("hi").decode("utf-8"),
         name="FEniX",
-        role=RoleEnum.IDOL
+        role=RoleEnum.IDOL,
+        avatar=6
     )
     fans = []
     for i in range(5):

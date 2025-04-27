@@ -10,6 +10,10 @@ def create_ls():
     if not user or user.role != RoleEnum.IDOL:
         return jsonify({"error": "access denied"}), 403
 
+    check_current_ls = get_current_ls()
+    if check_current_ls:
+        return jsonify({"error": "access denied"}), 400
+
     data = request.get_json() or {}
     fans_class = data.get("fans_class")
     title = data.get("title")
