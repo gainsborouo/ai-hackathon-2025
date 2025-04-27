@@ -1,6 +1,8 @@
 # Observatory
 ![Home Page](https://github.com/user-attachments/assets/380b6fd3-68f6-4d7d-adca-6c4e0af29d8a)
 
+This project is a web-based platform that builds a human-centric, tiered fan community for idols. By tracking how long and how deeply each fan engages, it automatically assigns them to familiarity levels—unlocking different content and interaction opportunities that reveal the idol’s full personality and creative work. The result is more meaningful fan experiences, reduced scheduling pressure on idols, and clearer, conflict-free collaboration for managers and partners.
+
 ## Features
 
 ### Frontend
@@ -13,10 +15,10 @@
 
 ### Backend
 
-- Role‐based user management (fan, idol, admin)
+- Role‐based user management (fan, idol)
 - Live‐stream session creation & management
+    - not yet done
 - Credit system: earn credits by watch time & interaction
-- Comment prioritization (e.g. upvoted questions surface higher)
 - JWT‐based auth, secured endpoints
 
 ---
@@ -26,7 +28,7 @@
 | Layer    | Technology                            |
 | -------- | ------------------------------------- |
 | Frontend | Vue 3, Vite, Tailwind CSS, Axios      |
-| Backend  | Flask, SQLAlchemy, Flask‐JWT‐Extended |
+| Backend  | Flask, SQLAlchemy                     |
 | Storage  | MySQL (or MariaDB)                    |
 
 ---
@@ -56,44 +58,17 @@ cd ai-hackathon-2025
 cd backend
 ```
 
-#### 2.1 Create & activate virtual env
+#### 2.1 Environment setup
+- [install poetry](https://python-poetry.org/docs/)
+- `poetry install`
+- `poetry env use python3`
+- `poetry shell`: activate the environmnent
+- `cp .env.example .env` and edit the .env
 
-```bash
-python3 -m venv .venv
-source .venv/bin/activate # macOS/Linux
-.\.venv\Scripts\activate # Windows PowerShell
-```
-
-#### 2.2 Install dependencies
-
-```
-pip install poetry
-poetry install
-```
-
-#### 2.3 Configure environment
+#### 2.3 Run server
 
 ```
-cp .env.example .env
-```
-
-Then edit .env:
-
-```
-DATABASE_URL=mysql+pymysql://<user>:<pass>@<host>:<port>/<db>
-JWT_SECRET=YOUR_SECRET_KEY
-```
-
-#### 2.4 Initialize database
-
-```
-flask db upgrade
-```
-
-#### 2.5 Run server
-
-```
-flask run --host=0.0.0.0 --port=8000
+python3 app.py
 ```
 
 Backend API is now at http://localhost:8000/api/
