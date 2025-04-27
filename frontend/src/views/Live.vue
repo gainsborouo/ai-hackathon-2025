@@ -5,6 +5,17 @@
       <div class="flex-1 bg-[#0E1A37] rounded-2xl mr-6 flex flex-col">
         <div class="flex-1 relative">
           <div v-if="streamUrl" class="w-full h-full">
+            <!-- 新增 avatar video -->
+            <video
+              ref="avatar"
+              id="avatar"
+              autoplay
+              playsinline
+              controls
+              class="absolute top-4 left-4 w-32 h-32 rounded-lg shadow-lg z-20"
+            ></video>
+
+            <!-- 原本的直播影片 -->
             <div v-if="isIdol" class="absolute top-4 right-4 z-10">
               <button
                 @click="stopStream"
@@ -167,6 +178,7 @@ import Sidebar from "../components/Sidebar.vue";
 import { authStore } from "../store/auth";
 import axios from "axios";
 import { onBeforeRouteLeave } from "vue-router";
+import { io } from "socket.io-client"; // 改成命名匯入
 
 const apiBase = import.meta.env.VITE_API_BASE_URL;
 const sidebarOpen = ref(false);
@@ -186,6 +198,30 @@ const isIdol = ref(false);
 const newStreamTitle = ref("");
 const newStreamClass = ref("1");
 const commentIntervalId = ref(null);
+const avatar = ref(null);
+const userText = ref(newStreamTitle.value); // 或者任何你想傳給後端的文字
+
+// 封裝一個初始化 avatar MSE 的 function
+const initAvatarStream = async () => {
+  await nextTick(); // 等 dom 更新，avatar.value 才會有
+  const videoEl = avatar.value;
+  if (!videoEl) return;
+  const mediaSource = new MediaSource();
+  videoEl.src = URL.createObjectURL(mediaSource);
+
+  mediaSource.addEventListener("sourceopen", () => {
+    const mime = 'video/webm; codecs="vp8,opus"';
+    const sourceBuffer = mediaSource.addSourceBuffer(mime);
+
+    const socket = io("http://localhost:8000");
+    socket.on("connect", () => {
+      socket.emit("start", { text: "How are you today" });
+    });
+    socket.on("video-chunk", (chunk) => {
+      sourceBuffer.appendBuffer(new Uint8Array(chunk));
+    });
+  });
+};
 
 watch(streamUrl, (newUrl) => {
   if (newUrl && videoPlayer.value) {
@@ -554,13 +590,19 @@ const sendMessage = async () => {
 };
 
 onMounted(() => {
+  // 原本的初始化
   getUserDataFromToken();
   fetchCurrentLive();
-
-  if (!window.appCleanupCallbacks) {
-    window.appCleanupCallbacks = [];
-  }
+  // window.appCleanupCallbacks.push(cleanupResources);
+  window.appCleanupCallbacks = window.appCleanupCallbacks || [];
   window.appCleanupCallbacks.push(cleanupResources);
+});
+
+// 監聽 streamUrl，值一旦為真就啟動 avatar 播放
+watch(streamUrl, (url) => {
+  if (url) {
+    initAvatarStream();
+  }
 });
 
 onBeforeUnmount(async () => {
