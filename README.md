@@ -1,4 +1,4 @@
-# ai-hackathon-2025
+# Observatory
 
 Human-centered design: exclusivity does not rely on “24/7 availability on demand.”  
 Positioning: “This version of me is only known to those who have known me for a long time.”  
