@@ -433,10 +433,14 @@ const fetchComments = async (streamId) => {
       },
     });
 
+    console.log("Fetched comments:", response.data);
+
     if (response.data && Array.isArray(response.data)) {
       messages.value = response.data.map((comment) => ({
         username: comment.username || "匿名用戶",
-        avatarUrl: getAvatarUrl || "/default-avatar.png",
+        avatarUrl: comment.user_avatar
+          ? `/avatar${comment.user_avatar}.png`
+          : "/default-avatar.png",
         content: comment.comment,
         tag: getFanClassTag(comment.user_class),
       }));
