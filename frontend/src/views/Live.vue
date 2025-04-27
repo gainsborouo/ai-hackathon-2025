@@ -19,6 +19,7 @@
               class="w-full h-[90%] translate-y-14"
               autoplay
               controls
+              muted
             ></video>
           </div>
           <div
@@ -121,6 +122,12 @@
                   ]"
                 >
                   {{ message.tag }}
+                </span>
+                <span
+                  v-if="message.user_class == 1"
+                  :class="['text-xs px-0.5 py-0.5']"
+                >
+                  👑
                 </span>
               </div>
               <div class="text-[#0E1A37] mt-0.5 text-sm">
@@ -443,6 +450,7 @@ const fetchComments = async (streamId) => {
           : "/default-avatar.png",
         content: comment.comment,
         tag: getFanClassTag(comment.user_class),
+        user_class: comment.user_class,
       }));
     }
   } catch (error) {
