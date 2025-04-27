@@ -1,25 +1,5 @@
 # Observatory
-
-Human-centered design: exclusivity does not rely on “24/7 availability on demand.”  
-Positioning: “This version of me is only known to those who have known me for a long time.”  
-Not about idols belonging to fans, but fans belonging to the community and ecosystem of the idol’s brand and culture.
-
----
-
-## Concept
-
-Fans are grouped into familiarity levels based on engagement and time spent following the idol. As fans level up, they unlock new personality facets and creative content—presenting a multidimensional, human perspective.
-
----
-
-## Pain Points Addressed
-
-- **Idols**: Reduce pressure to always perform; share curated glimpses of self.
-- **Fans**: Deeper, tiered access to content and interaction.
-- **Management**: Fewer scheduling conflicts; controlled content rollout.
-- **Partners**: Stable ecosystem for collaboration, less ad-hoc testing.
-
----
+![Home Page](https://github.com/user-attachments/assets/380b6fd3-68f6-4d7d-adca-6c4e0af29d8a)
 
 ## Features
 
@@ -151,52 +131,6 @@ npm run dev
 ```
 
 Access the app at http://localhost:5173
-
----
-
-## Scripts
-
-| Command            | Location | Description                      |
-| ------------------ | -------- | -------------------------------- |
-| `npm run dev`      | frontend | Start Vite dev server            |
-| `npm run build`    | frontend | Build production assets          |
-| `flask run`        | backend  | Start Flask development server   |
-| `flask db upgrade` | backend  | Apply DB migrations              |
-| `flask shell`      | backend  | Open Flask REPL with app context |
-
----
-
-## Project Structure
-
-### Frontend
-
-```
-frontend/
-├── src/
-│   ├── assets/          # Static assets (CSS, images)
-│   ├── components/      # Reusable Vue components
-│   ├── views/           # Vue pages (Home, Login, Register, etc.)
-│   ├── store/           # Vuex store for state management
-│   ├── router/          # Vue Router configuration
-│   ├── main.js          # Entry point for the Vue app
-│   └── App.vue          # Root Vue component
-├── public/              # Public assets
-├── vite.config.js       # Vite configuration
-└── package.json         # Frontend dependencies and scripts
-```
-
-### Backend
-
-```
-backend/
-├── controller/          # API controllers for various features
-├── models.py            # SQLAlchemy models
-├── routes.py            # API route definitions
-├── seeder.py            # Database seeder script
-├── app.py               # Flask application entry point
-├── .env.example         # Example environment variables
-└── pyproject.toml       # Backend dependencies and configuration
-```
 
 ---
 
