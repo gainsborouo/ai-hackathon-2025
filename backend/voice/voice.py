@@ -89,10 +89,12 @@ class VoiceAssistant:
             VoiceId=voice_id
         )
 
-        with open('output.mp3', 'wb') as file:
-            file.write(response_polly['AudioStream'].read())
+        return response_polly['AudioStream']
 
-        print("語音檔案產生完成！")
+        # with open('output.mp3', 'wb') as file:
+        #     file.write(response_polly['AudioStream'].read())
+
+        # print("語音檔案產生完成！")
 
 if __name__ == "__main__":
     assistant = VoiceAssistant()
