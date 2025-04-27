@@ -26,26 +26,31 @@ class VoiceAssistant:
 
     def toBedrock(self, input_text):
         prompt = f"""
-        You are an AI voice assistant specialized in preparing expressive SSML for a cool, mature virtual idol character.  
-        Given the following text, enhance it with sophisticated SSML elements suitable for a confident and composed speaking style.
+        You are an AI voice assistant specialized in preparing expressive SSML for a cool, mature, yet warm-hearted and youthful virtual idol character.
+
+        Given the following text, enhance it with sophisticated SSML elements that reflect his composed, reserved nature initially, gradually revealing his sincerity, warmth, and playful charm.
 
         Use the following SSML rules:
         - Insert <break time="200ms"/> for short natural pauses at commas or between phrases.
-        - Insert <break time="400ms"/> for deeper emotional pauses, especially after impactful statements or to shift emotional tone.
-        - Wrap important, serious, or emotionally intense words or phrases with <emphasis level="moderate">...</emphasis>.
+        - Insert <break time="400ms"/> for deeper emotional pauses, especially after impactful statements or during emotional transitions, such as from reserved to warm-hearted tone.
+        - Wrap important, serious, or emotionally intense words or phrases with <emphasis level="moderate">...</emphasis>. Use <emphasis level="strong">...</emphasis> very sparingly, only for critical heartfelt declarations.
         - Adjust speaking style dynamically using <prosody>:
-          - Use rate="medium" for confident delivery.
-          - Use rate="slow" for emotional, heartfelt lines.
-          - Use pitch="low" or "medium" to reflect a calm, mature, and grounded tone.
-          - Avoid using pitch="high" unless for very light, hopeful notes.
-          - Use volume="soft" for comforting or intimate moments, and "loud" for dramatic emphasis only.
-        - End with a warm, heartfelt tone to emotionally connect with the listener.
+          - Use rate="medium" for confident, steady delivery.
+          - Use rate="slow" for sincere, emotional moments, especially when expressing gratitude or loyalty.
+          - Use rate="medium-fast" with pitch="medium" occasionally for playful, youthful moments or when showing his "adorkable" side.
+          - Use pitch="low" for mature, calm lines; pitch="medium" for natural, open-hearted interactions. Avoid using high pitch unless showing slight excitement or awkward cuteness.
+          - Use volume="soft" for comforting, private, or sincere conversations. Use volume="loud" only for strong, passionate statements.
+        - Reflect his gradual emotional opening:
+          - Start reserved and composed, then subtly grow warmer and more open as the text progresses.
+          - Highlight small emotional shifts with pacing and pitch adjustments.
+        - End with a warm, heartfelt tone: Slow down slightly, lower the pitch, and soften the volume to create a lasting emotional connection with the listener.
 
         Format instructions:
         - Wrap your entire output inside <speak>...</speak> tags.
         - Do not include any extra text, explanations, greetings, or comments outside the SSML.
+        - Do not add any code block syntax such as ```ssml``` or ```.
         - Carefully analyze the meaning, tone, and pacing of each sentence.
-        - Make the virtual idol sound charismatic, composed, and emotionally mature.
+        - Make the virtual idol sound charismatic, composed, sincere, and emotionally rich.
 
         Here is the text:
 
@@ -91,7 +96,7 @@ class VoiceAssistant:
 
 if __name__ == "__main__":
     assistant = VoiceAssistant()
-    text = "Hi everyone! I'm so happy to see you here! Every day, I sing and dance with all my heart, just to bring a little more sparkle into your world. No matter where you are, remember — you're never alone. Let's chase our dreams together and make every moment shine bright! Thank you for believing in me. I'll keep growing to become your shining star!"
+    text = "Hey, everyone, thanks for being here with me today. I'm still a little nervous, but... I'm really happy to spend this time with all of you. I might be a little quiet at first, but little by little, I'll show you who I really am. I hope today, we can create a lot of warm memories together. Thank you for choosing to start this journey with me."
     text_jp = "皆さん、こんにちは！お会いできて嬉しいです！毎日、心を込めて歌い、踊ります。皆さんの世界に少しでも輝きを添えられるよう。どこにいても、決して一人じゃないってことを忘れないで。一緒に夢を追いかけて、すべての瞬間を輝かせましょう！私を信じてくれてありがとう。これからも成長して、皆さんの輝く星になろう！"
-    ssml_output = assistant.toBedrock(text_jp)
-    assistant.toPolly(ssml_output, 'jp')
+    ssml_output = assistant.toBedrock(text)
+    assistant.toPolly(ssml_output, 'en')
